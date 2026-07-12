@@ -1,0 +1,103 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir.txt
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+/build/
+
+# Android related
+**/android/**/gradle-wrapper.jar
+**/android/.gradle
+**/android/captures/
+**/android/gradlew
+**/android/gradlew.bat
+**/android/local.properties
+**/android/**/build/
+**/android/**/local.properties
+**/android/**/out/
+**/android/**/*/build/
+**/android/**/*/build/
+*.apk
+*.aab
+
+# iOS related
+**/ios/Flutter/.last_build_id
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/app.flx
+**/ios/Flutter/app.zip
+**/ios/Flutter/flutter_assets/
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/Runner/GeneratedPluginRegistrant.*
+**/ios/**/build/
+**/ios/.generated/
+**/ios/*.xcworkspace
+**/ios/*.xcodeproj/xcuserdata/
+**/ios/*.xcodeproj/project.xcworkspace/
+**/ios/*.xcodeproj/xcshareddata/xcschemes/
+*.ipa
+
+# macOS related
+**/macos/Flutter/GeneratedPluginRegistrant.*
+**/macos/**/build/
+**/macos/*.xcworkspace
+**/macos/*.xcodeproj/xcuserdata/
+**/macos/*.xcodeproj/project.xcworkspace/
+**/macos/*.xcodeproj/xcshareddata/xcschemes/
+*.dmg
+
+# Linux related
+**/linux/**/build/
+**/linux/**/*.so
+**/linux/**/*.o
+**/linux/**/lib*.a
+**/linux/**/*.out
+
+# Windows related
+**/windows/**/build/
+**/windows/**/*.exe
+**/windows/**/*.dll
+**/windows/**/*.lib
+**/windows/**/*.exp
+**/windows/**/*.pdb
+**/windows/**/*.ilk
+
+# Web related
+**/web/build/
+
+# Coverage
+coverage/
+*.lcov
+
+# Misc
+*.orig
+*.part
+*.patch

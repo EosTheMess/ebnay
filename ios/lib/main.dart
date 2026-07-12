@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ebay_sheet_editor/screens/sheet_list_screen.dart';
-import 'package:ebay_sheet_editor/services/sheet_service.dart';
 import 'package:ebay_sheet_editor/services/auth_service.dart';
 
 void main() {
@@ -48,7 +47,9 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    return _isSignedIn ? const SheetListScreen() : const AuthScreen();
+    return _isSignedIn 
+        ? const SheetListScreen()
+        : const AuthScreen();
   }
 }
 
@@ -63,7 +64,10 @@ class _AuthScreenState extends State<AuthScreen> {
   bool _isLoading = false;
 
   Future<void> _signIn() async {
-    setState(() => _isLoading = true);
+    setState(() {
+      _isLoading = true;
+    });
+    
     try {
       await AuthService.signIn();
       if (mounted) {
@@ -78,7 +82,11 @@ class _AuthScreenState extends State<AuthScreen> {
         );
       }
     } finally {
-      if (mounted) setState(() => _isLoading = false);
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 

@@ -1,25 +1,11 @@
 import 'package:googleapis/sheets/v4.dart' as sheets;
-import 'dart:io';
 import 'package:ebay_sheet_editor/services/auth_service.dart';
 
 class SheetService {
-  // SPREADSHEET_ID can be provided at build time via --dart-define=SPREADSHEET_ID=xxx
-  // or at runtime via environment variable (for CI/CD)
-  static String? get _spreadsheetId {
-    // First try build-time constant (--dart-define)
-    const String buildTimeId = String.fromEnvironment('SPREADSHEET_ID');
-    if (buildTimeId.isNotEmpty) return buildTimeId;
-    
-    // Then try environment variable (for CI/CD)
-    final String envId = Platform.environment['SPREADSHEET_ID'] ?? '';
-    if (envId.isNotEmpty) return envId;
-    
-    return null;
-  }
+  static const String? _spreadsheetId = String.fromEnvironment('SPREADSHEET_ID');
 
   static Future<List<Map<String, dynamic>>> getSheetData() async {
-    final spreadsheetId = _spreadsheetId;
-    if (spreadsheetId == null || spreadsheetId.isEmpty) {
+    if (_spreadsheetId == null || _spreadsheetId!.isEmpty) {
       return _getDummyData();
     }
 
@@ -28,7 +14,7 @@ class SheetService {
 
     try {
       final result = await sheetsApi.spreadsheets.values.get(
-        spreadsheetId,
+        _spreadsheetId!,
         'Sheet1!A1:Z1000',
       );
 
@@ -85,8 +71,7 @@ class SheetService {
   }
 
   static Future<bool> updateSheetData(List<Map<String, dynamic>> data) async {
-    final spreadsheetId = _spreadsheetId;
-    if (spreadsheetId == null || spreadsheetId.isEmpty) {
+    if (_spreadsheetId == null || _spreadsheetId!.isEmpty) {
       return false;
     }
 
@@ -95,11 +80,12 @@ class SheetService {
 
     try {
       final values = _convertToTableData(data);
-      final valueRange = sheets.ValueRange()..values = values;
+      final valueRange = sheets.ValueRange()
+        ..values = values;
 
       await sheetsApi.spreadsheets.values.update(
         valueRange,
-        spreadsheetId,
+        _spreadsheetId!,
         'Sheet1!A1:Z',
         valueInputOption: 'USER_ENTERED',
       );
@@ -114,10 +100,10 @@ class SheetService {
     if (data.isEmpty) return [];
 
     final headers = ['ID', 'Name', 'Price', 'Category', 'Description'];
-    final values = [headers];
+    final values = <List<dynamic>>[headers];
 
     for (final item in data) {
-      final row = [
+      final row = <dynamic>[
         item['id'] ?? '',
         item['name'] ?? '',
         item['price'] ?? '',
@@ -132,30 +118,18 @@ class SheetService {
 
   static Future<bool> addSheetItem(Map<String, dynamic> item) async {
     final data = await getSheetData();
-    final newItem = {
-      'id': (data.length + 1).toString(),
-      'name': item['name'],
-      'price': item['price'],
-      'category': item['category'],
-      'description': item['description'],
-    };
+    final newItem = {...item, 'id': (data.length + 1).toString()};
     final updatedData = [...data, newItem];
     return await updateSheetData(updatedData);
   }
 
   static Future<bool> updateSheetItem(String id, Map<String, dynamic> item) async {
     final data = await getSheetData();
-    final index = data.indexWhere((item) => item['id'] == id);
+    final index = data.indexWhere((mapItem) => mapItem['id'] == id);
     if (index == -1) return false;
 
     final updatedData = List<Map<String, dynamic>>.from(data);
-    updatedData[index] = {
-      'id': id,
-      'name': item['name'],
-      'price': item['price'],
-      'category': item['category'],
-      'description': item['description'],
-    };
+    updatedData[index] = {...item, 'id': id};
     return await updateSheetData(updatedData);
   }
 

@@ -1,7 +1,7 @@
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis_auth/auth_io.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
 
 class AuthService {
   static const _scopes = [
@@ -11,6 +11,7 @@ class AuthService {
 
   static final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: _scopes,
+    serverClientId: const String.fromEnvironment('GOOGLE_SERVER_CLIENT_ID'),
   );
 
   static final FlutterSecureStorage _storage = const FlutterSecureStorage();
@@ -48,10 +49,14 @@ class AuthService {
     if (token == null) {
       throw Exception('Not authenticated');
     }
-    
-    // Create an authenticated HTTP client using the access token
-    final client = http.Client();
-    return AuthClient(client, _scopes, token);
+    return clientViaAccessToken(
+      http.Client(),
+      AccessCredentials(
+        AccessToken('Bearer', token, DateTime.now().add(const Duration(hours: 1))),
+        null,
+        _scopes,
+      ),
+    );
   }
 
   static Future<void> refreshToken() async {
@@ -62,20 +67,5 @@ class AuthService {
     if (auth.accessToken != null) {
       await _storage.write(key: 'access_token', value: auth.accessToken);
     }
-  }
-}
-
-/// Custom AuthClient that adds the Authorization header to requests
-class AuthClient extends http.BaseClient {
-  final http.Client _client;
-  final List<String> _scopes;
-  final String _accessToken;
-
-  AuthClient(this._client, this._scopes, this._accessToken);
-
-  @override
-  Future<http.StreamedResponse> send(http.BaseRequest request) {
-    request.headers['Authorization'] = 'Bearer $_accessToken';
-    return _client.send(request);
   }
 }
