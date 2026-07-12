@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:ebay_sheet_editor/models/sheet_item.dart';
 import 'package:ebay_sheet_editor/services/sheet_service.dart';
 import 'package:ebay_sheet_editor/widgets/item_tile.dart';
 import 'package:ebay_sheet_editor/screens/edit_item_screen.dart';
 import 'package:ebay_sheet_editor/services/auth_service.dart';
+import 'package:ebay_sheet_editor/main.dart';
 
 class SheetListScreen extends StatefulWidget {
   const SheetListScreen({super.key});

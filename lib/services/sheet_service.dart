@@ -114,7 +114,7 @@ class SheetService {
     if (data.isEmpty) return [];
 
     final headers = ['ID', 'Name', 'Price', 'Category', 'Description'];
-    final values = [headers];
+    final values = <List<dynamic>>[headers];
 
     for (final item in data) {
       final row = [
