@@ -1,10 +1,7 @@
 import 'package:googleapis/sheets/v4.dart' as sheets;
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ebay_sheet_editor/services/auth_service.dart';
 
 class SheetService {
-  static final FlutterSecureStorage _storage = const FlutterSecureStorage();
-
   static const String? _spreadsheetId = String.fromEnvironment('SPREADSHEET_ID');
 
   static Future<List<Map<String, dynamic>>> getSheetData() async {
@@ -103,10 +100,10 @@ class SheetService {
     if (data.isEmpty) return [];
 
     final headers = ['ID', 'Name', 'Price', 'Category', 'Description'];
-    final values = [headers];
+    final values = <List<dynamic>>[headers];
 
     for (final item in data) {
-      final row = [
+      final row = <dynamic>[
         item['id'] ?? '',
         item['name'] ?? '',
         item['price'] ?? '',
