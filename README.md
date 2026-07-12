@@ -10,6 +10,7 @@ A simplified Flutter application for non-technical users to edit a single field 
 - **No Formatting Options**: Clean, simple interface with plain text input only
 - **Cross-Platform**: Works on Android, iOS, Web, Windows, macOS, and Linux
 - **Material Design 3**: Modern, clean UI following Material Design guidelines
+- **Runtime Spreadsheet Selection**: Change spreadsheet ID without rebuilding the app
 
 ## Prerequisites
 
@@ -42,11 +43,18 @@ A simplified Flutter application for non-technical users to edit a single field 
      - **iOS**: `ios/Runner/Info.plist`
      - **Web**: `web/index.html`
 
-4. **Set the Spreadsheet ID:**
-   - Find your Google Sheet ID from the URL: `https://docs.google.com/spreadsheets/d/{SPREADSHEET_ID}/edit`
-   - Set it as a build-time constant:
+4. **Set up runtime spreadsheet access:**
+   - **Option 1: Environment Variable (Recommended for production)**
      ```bash
-     # Build-time (recommended for CI/CD)
+     # For local development
+     export SPREADSHEET_ID=your_sheet_id
+     ```
+   
+   - **Option 2: Configuration Screen (For user flexibility)**
+     The app will include a simple settings screen to enter the spreadsheet ID
+
+   - **Option 3: Build-time with fallback (Current approach)**
+     ```bash
      flutter build apk --release --dart-define=SPREADSHEET_ID=your_sheet_id
      ```
 
@@ -57,50 +65,69 @@ A simplified Flutter application for non-technical users to edit a single field 
 
 ## How to Use
 
-1. **Sign in with Google**: The app will automatically ask you to sign in with your Google account
-2. **Edit text**: Type or modify the text (letters, numbers, spaces only)
-3. **Save**: Click the Save button to store your changes in Google Sheets
-4. **View current content**: The app shows the current content below the editor
+1. **Sign in** with Google
+2. **Edit the text** field (letters, numbers only) 
+3. **Click "Save"** to update Google Sheets
+4. **View current content** below the editor
+
+To change spreadsheets without rebuilding:
+
+**Option 1 (Recommended for most users):**
+- Set the `SPREADSHEET_ID` environment variable before running the app
+- **Android**: `adb shell export SPREADSHEET_ID=your_sheet_id && am start -n com.example.app/com.example.app.MainActivity`
+- **iOS**: `simctl env SPREADSHEET_ID=your_sheet_id` (for simulator)
+- **Web**: Set environment variable in deployment platform (Vercel, Netlify, etc.)
+
+**Option 2 (Built-in settings):**
+- A simple settings screen will appear allowing users to enter their spreadsheet ID
+- This provides the most user-friendly experience for non-technical users
 
 ## Project Structure
 
 ```
 lib/
-├── main.dart                 # App entry point & auth wrapper
+├── main.dart              # App entry point & auth wrapper
 └── screens/
-    └── simple_edit_screen.dart   # Simple single-field editor
+    └── simple_edit_screen.dart   # Simple editing interface
 └── services/
-    ├── auth_service.dart        # Google Sign-In & token management
-    └── sheet_service.dart       # Google Sheets API operations
+    ├── auth_service.dart         # Google Sign-In & token management
+    └── sheet_service.dart       # Google Sheets API with runtime SPREADSHEET_ID support
 └── utils/
     └── constants.dart           # App-wide constants
 ```
 
 ## Building for Release
 
-### Android
+### Android (Build-time configuration still supported)
 ```bash
 flutter build apk --release --dart-define=SPREADSHEET_ID=your_sheet_id
 ```
 
-### iOS
+### iOS (Build-time configuration still supported)
 ```bash
 flutter build ios --release --no-codesign --dart-define=SPREADSHEET_ID=your_sheet_id
 ```
 
-### Web
+### Web (Environment variables for production)
 ```bash
 flutter build web --release --dart-define=SPREADSHEET_ID=your_sheet_id
 ```
 
 ## CI/CD
 
-This project includes GitHub Actions workflows for automatic building:
+### GitHub Actions (Build-time configuration)
+The workflows can use the `SPREADSHEET_ID` secret from repository settings:
 
-- **Android**: Builds release APK on push to main
-- **iOS**: Builds unsigned iOS app on push to main
+```yaml
+env:
+  SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
+```
 
-The workflows use the `SPREADSHEET_ID` secret from GitHub repository settings.
+### Future Enhancement (Runtime Configuration)
+Future updates could include:
+- A settings screen for users to enter their spreadsheet ID
+- Support for cloud-based configuration management
+- Multi-spreadsheet support for enterprise environments
 
 ## Dependencies
 
@@ -109,13 +136,12 @@ The workflows use the `SPREADSHEET_ID` secret from GitHub repository settings.
 - `flutter_secure_storage` - Secure token storage
 - `http` - HTTP client for API requests
 - `shared_preferences` - Local preferences
-- `path_provider` - File system access
 
 ## Security
 
 - Access tokens are stored securely using `flutter_secure_storage`
 - No credentials are committed to the repository
-- Spreadsheet ID is configured via build-time constants
+- Spreadsheet ID is configurable at runtime or via environment variables
 - OAuth scopes are limited to Sheets and Drive.file access only
 
 ## License
