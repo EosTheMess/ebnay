@@ -1,15 +1,37 @@
+import 'package:flutter/material.dart';
+
 class SheetItem {
   final String id;
-  final Map<String, String> data;
-  final int rowIndex;
+  final String name;
+  final String price;
+  final String category;
+  final String description;
 
-  SheetItem({required this.id, required this.data, required this.rowIndex});
+  SheetItem({
+    required this.id,
+    required this.name,
+    required this.price,
+    required this.category,
+    required this.description,
+  });
 
-  SheetItem copyWith({String? id, Map<String, String>? data, int? rowIndex}) {
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'price': price,
+      'category': category,
+      'description': description,
+    };
+  }
+
+  factory SheetItem.fromMap(Map<String, dynamic> map) {
     return SheetItem(
-      id: id ?? this.id,
-      data: data ?? this.data,
-      rowIndex: rowIndex ?? this.rowIndex,
+      id: map['id'] ?? '',
+      name: map['name'] ?? '',
+      price: map['price'] ?? '',
+      category: map['category'] ?? '',
+      description: map['description'] ?? '',
     );
   }
 }

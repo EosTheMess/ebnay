@@ -69,7 +69,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to save: $e')),
+          SnackBar(content: Text('Failed to save: \$e')),
         );
       }
     } finally {

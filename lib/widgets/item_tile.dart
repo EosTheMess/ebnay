@@ -2,25 +2,64 @@ import 'package:flutter/material.dart';
 
 class ItemTile extends StatelessWidget {
   final Map<String, dynamic> item;
-  final VoidCallback? onEdit;
-  final VoidCallback? onDelete;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
 
-  const ItemTile({super.key, required this.item, this.onEdit, this.onDelete});
+  const ItemTile({
+    super.key,
+    required this.item,
+    required this.onEdit,
+    required this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final name = item['name'] ?? 'Untitled';
-    final price = item['price'] ?? 'N/A';
-    final category = item['category'] ?? 'Uncategorized';
-    final description = item['description'] ?? 'No description';
-
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: ListTile(
-        title: Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text('$price | $category'),
-        trailing: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        leading: CircleAvatar(
+          backgroundColor: Colors.blue.shade100,
+          child: Text(
+            item['name']?.isNotEmpty == true
+                ? item['name'][0].toUpperCase()
+                : '?',
+            style: TextStyle(color: Colors.blue.shade700),
+          ),
+        ),
+        title: Text(
+          item['name'] ?? 'Untitled',
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (item['description']?.isNotEmpty ?? false)
+              Text(
+                item['description'],
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            Row(
+              children: [
+                if (item['price']?.isNotEmpty ?? false)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Text(
+                      'Price: \$${item['price']}',
+                      style: const TextStyle(color: Colors.green),
+                    ),
+                  ),
+                if (item['category']?.isNotEmpty ?? false)
+                  Text(
+                    item['category'],
+                    style: const TextStyle(color: Colors.grey),
+                  ),
+              ],
+            ),
+          ],
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
               icon: const Icon(Icons.edit, color: Colors.blue),
@@ -34,28 +73,7 @@ class ItemTile extends StatelessWidget {
             ),
           ],
         ),
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: Text(name),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text('Price: $price'),
-                  Text('Category: $category'),
-                  Text('Description: $description'),
-                ],
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Close'),
-                ),
-              ],
-            ),
-          );
-        },
+        onTap: onEdit,
       ),
     );
   }

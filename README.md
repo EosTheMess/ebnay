@@ -1,12 +1,13 @@
-# eBay Sheet Editor
+# Simple Sheet Editor
 
-A simple Flutter application for editing Google Sheets data, designed for non-technical users to manage inventory or product listings.
+A simplified Flutter application for non-technical users to edit a single field in a Google Sheet. This app is designed for ease of use with no complex options or settings.
 
 ## Features
 
-- **Google Sign-In**: Secure authentication using Google OAuth 2.0
-- **Google Sheets Integration**: Read, create, update, and delete items in a Google Sheet
-- **Offline Support**: Cached data for viewing when offline
+- **Simple One-Field Editing**: Edit just one text field in your Google Sheet
+- **Google Sign-In**: Secure authentication (handled automatically)
+- **Google Sheets Integration**: Read and save data to your Google Sheet
+- **No Formatting Options**: Clean, simple interface with plain text input only
 - **Cross-Platform**: Works on Android, iOS, Web, Windows, macOS, and Linux
 - **Material Design 3**: Modern, clean UI following Material Design guidelines
 
@@ -43,14 +44,10 @@ A simple Flutter application for editing Google Sheets data, designed for non-te
 
 4. **Set the Spreadsheet ID:**
    - Find your Google Sheet ID from the URL: `https://docs.google.com/spreadsheets/d/{SPREADSHEET_ID}/edit`
-   - Set it as a build-time constant or environment variable:
+   - Set it as a build-time constant:
      ```bash
      # Build-time (recommended for CI/CD)
      flutter build apk --release --dart-define=SPREADSHEET_ID=your_sheet_id
-     
-     # Or set as environment variable for runtime
-     export SPREADSHEET_ID=your_sheet_id
-     flutter run
      ```
 
 5. **Run the app:**
@@ -58,23 +55,28 @@ A simple Flutter application for editing Google Sheets data, designed for non-te
    flutter run
    ```
 
+## How to Use
+
+1. **Sign in with Google**: The app will automatically ask you to sign in with your Google account
+2. **Select your field**: Choose from a dropdown menu of available fields in your sheet
+3. **Edit text**: Type or modify the text (letters, numbers, and spaces only)
+4. **Save**: Click the Save button to store your changes in Google Sheets
+5. **View updates**: The app shows the current content below the editor
+
 ## Project Structure
 
 ```
 lib/
-├── main.dart                 # App entry point & authentication wrapper
-├── models/
-│   └── sheet_item.dart       # Data model for sheet items
+├── main.dart                 # App entry point
 ├── screens/
-│   ├── sheet_list_screen.dart   # Main list view with CRUD operations
-│   └── edit_item_screen.dart    # Form for adding/editing items
+│   └── simple_edit_screen.dart   # Simple single-field editor
 ├── services/
 │   ├── auth_service.dart        # Google Sign-In & token management
 │   └── sheet_service.dart       # Google Sheets API operations
 ├── utils/
 │   └── constants.dart           # App-wide constants
-└── widgets/
-    └── item_tile.dart           # Reusable list item widget
+└── models/
+    └── sheet_item.dart         # Data model for sheet items
 ```
 
 ## Building for Release
@@ -82,8 +84,6 @@ lib/
 ### Android
 ```bash
 flutter build apk --release --dart-define=SPREADSHEET_ID=your_sheet_id
-# or
-flutter build appbundle --release --dart-define=SPREADSHEET_ID=your_sheet_id
 ```
 
 ### iOS
@@ -113,28 +113,14 @@ The workflows use the `SPREADSHEET_ID` secret from GitHub repository settings.
 - `http` - HTTP client for API requests
 - `shared_preferences` - Local preferences
 - `path_provider` - File system access
-- `intl` - Internationalization
-- `flutter_slidable` - Swipe-to-delete list items
 
 ## Security
 
 - Access tokens are stored securely using `flutter_secure_storage`
 - No credentials are committed to the repository
-- Spreadsheet ID is configured via build-time constants or environment variables
+- Spreadsheet ID is configured via build-time constants
 - OAuth scopes are limited to Sheets and Drive.file access only
 
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run `flutter analyze` and `flutter test`
-5. Submit a pull request
-
-## Support
-
-For issues and feature requests, please use the GitHub issue tracker.
