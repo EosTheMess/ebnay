@@ -1,6 +1,6 @@
 import 'package:googleapis/sheets/v4.dart' as sheets;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:ebay_sheet_editor/models/sheet_item.dart';
+import 'package:ebay_sheet_editor/services/auth_service.dart';
 
 class SheetService {
   static final FlutterSecureStorage _storage = const FlutterSecureStorage();
@@ -121,18 +121,18 @@ class SheetService {
 
   static Future<bool> addSheetItem(Map<String, dynamic> item) async {
     final data = await getSheetData();
-    final newItem = item.copyWith(id: (data.length + 1).toString());
+    final newItem = {...item, 'id': (data.length + 1).toString()};
     final updatedData = [...data, newItem];
     return await updateSheetData(updatedData);
   }
 
   static Future<bool> updateSheetItem(String id, Map<String, dynamic> item) async {
     final data = await getSheetData();
-    final index = data.indexWhere((item) => item['id'] == id);
+    final index = data.indexWhere((mapItem) => mapItem['id'] == id);
     if (index == -1) return false;
 
     final updatedData = List<Map<String, dynamic>>.from(data);
-    updatedData[index] = item.copyWith(id: id);
+    updatedData[index] = {...item, 'id': id};
     return await updateSheetData(updatedData);
   }
 
