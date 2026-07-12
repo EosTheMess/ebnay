@@ -116,7 +116,7 @@ class _SheetListScreenState extends State<SheetListScreen> {
               UndoButton(
                 label: 'Undo',
                 onUndo: () {
-                  _undoDelete(deletedItem);
+                  _undoDelete(id);
                 },
               ),
             ],
@@ -143,6 +143,36 @@ class _SheetListScreenState extends State<SheetListScreen> {
       );
     }
   }
+}
+
+class AuthWrapper extends StatefulWidget {
+  const AuthWrapper({super.key});
+
+  @override
+  State<AuthWrapper> createState() => _AuthWrapperState();
+}
+
+class _AuthWrapperState extends State<AuthWrapper> {
+  bool _isSignedIn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkAuthStatus();
+  }
+
+  Future<void> _checkAuthStatus() async {
+    final isSignedIn = await AuthService.isSignedIn();
+    setState(() {
+      _isSignedIn = isSignedIn;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _isSignedIn ? const SheetListScreen() : const AuthScreen();
+  }
+}
 
   @override
   Widget build(BuildContext context) {

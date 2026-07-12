@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:ebay_sheet_editor/screens/simple_edit_screen.dart';
+import 'package:ebay_sheet_editor/screens/sheet_list_screen.dart';
+import 'package:ebay_sheet_editor/services/sheet_service.dart';
 import 'package:ebay_sheet_editor/services/auth_service.dart';
+import 'package:ebay_sheet_editor/screens/simple_edit_screen.dart';
 
 void main() {
-  runApp(const SimpleSheetEditorApp());
+  runApp(const EbaySheetEditorApp());
 }
 
-class SimpleSheetEditorApp extends StatelessWidget {
-  const SimpleSheetEditorApp({super.key});
+class EbaySheetEditorApp extends StatelessWidget {
+  const EbaySheetEditorApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Simple Sheet Editor',
+      title: 'EBay Sheet Editor',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
@@ -47,7 +49,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    return _isSignedIn ? const SimpleEditScreen() : const AuthScreen();
+    return _isSignedIn ? const SheetListScreen() : const AuthScreen();
   }
 }
 
@@ -67,13 +69,13 @@ class _AuthScreenState extends State<AuthScreen> {
       await AuthService.signIn();
       if (mounted) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const SimpleEditScreen()),
+          MaterialPageRoute(builder: (context) => const SheetListScreen()),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Sign in failed: \$e')),
+          SnackBar(content: Text('Sign in failed: $e')),
         );
       }
     } finally {
@@ -84,7 +86,7 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Simple Sheet Editor')),
+      appBar: AppBar(title: const Text('EBay Sheet Editor')),
       body: Center(
         child: _isLoading
             ? const CircularProgressIndicator()
