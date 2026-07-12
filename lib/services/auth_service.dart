@@ -48,7 +48,14 @@ class AuthService {
     if (token == null) {
       throw Exception('Not authenticated');
     }
-    return clientViaAccessToken(token, _scopes);
+    return clientViaAccessToken(
+      http.Client(),
+      AccessCredentials(
+        AccessToken('Bearer', token, DateTime.now().add(const Duration(hours: 1))),
+        null,
+        _scopes,
+      ),
+    );
   }
 
   static Future<void> refreshToken() async {
