@@ -3,7 +3,7 @@ import 'package:ebay_sheet_editor/services/sheet_service.dart';
 import 'package:ebay_sheet_editor/widgets/item_tile.dart';
 import 'package:ebay_sheet_editor/screens/edit_item_screen.dart';
 import 'package:ebay_sheet_editor/services/auth_service.dart';
-import 'package:ebay_sheet_editor/main.dart';
+import 'package:ebay_sheet_editor/widgets/undo_button.dart';
 
 class SheetListScreen extends StatefulWidget {
   const SheetListScreen({super.key});
@@ -16,6 +16,7 @@ class _SheetListScreenState extends State<SheetListScreen> {
   List<Map<String, dynamic>> _items = [];
   bool _isLoading = true;
   String? _error;
+  List<Map<String, dynamic>> _deletedItems = [];
 
   @override
   void initState() {
@@ -99,9 +100,39 @@ class _SheetListScreenState extends State<SheetListScreen> {
     );
 
     if (confirm == true) {
+      // Store deleted item for undo
+      final deletedItem = _items.firstWhere((item) => item['id'] == id);
+      _deletedItems.add(deletedItem);
       await SheetService.deleteSheetItem(id);
       _refreshData();
+      
+      // Show undo snackbar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              const Text('Item deleted'),
+              const Spacer(),
+              UndoButton(
+                label: 'Undo',
+                onUndo: () {
+                  _undoDelete(deletedItem);
+                },
+              ),
+            ],
+          ),
+          duration: const Duration(seconds: 5),
+        ),
+      );
     }
+  }
+
+  Future<void> _undoDelete(String deletedId) async {
+    if (_deletedItems.isEmpty) return;
+    
+    final deletedItem = _deletedItems.removeLast();
+    await SheetService.addSheetItem(deletedItem);
+    _refreshData();
   }
 
   Future<void> _signOut() async {
