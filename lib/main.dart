@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:ebay_sheet_editor/screens/sheet_list_screen.dart';
-import 'package:ebay_sheet_editor/services/sheet_service.dart';
-import 'package:ebay_sheet_editor/services/auth_service.dart';
 import 'package:ebay_sheet_editor/screens/simple_edit_screen.dart';
+import 'package:ebay_sheet_editor/services/auth_service.dart';
 
 void main() {
-  runApp(const EbaySheetEditorApp());
+  runApp(const SimpleSheetEditorApp());
 }
 
-class EbaySheetEditorApp extends StatelessWidget {
-  const EbaySheetEditorApp({super.key});
+class SimpleSheetEditorApp extends StatelessWidget {
+  const SimpleSheetEditorApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'EBay Sheet Editor',
+      title: 'Simple Sheet Editor',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
@@ -49,7 +47,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    return _isSignedIn ? const SheetListScreen() : const AuthScreen();
+    return _isSignedIn ? const SimpleEditScreen() : const AuthScreen();
   }
 }
 
@@ -69,7 +67,7 @@ class _AuthScreenState extends State<AuthScreen> {
       await AuthService.signIn();
       if (mounted) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const SheetListScreen()),
+          MaterialPageRoute(builder: (context) => const SimpleEditScreen()),
         );
       }
     } catch (e) {
@@ -86,7 +84,7 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('EBay Sheet Editor')),
+      appBar: AppBar(title: const Text('Simple Sheet Editor')),
       body: Center(
         child: _isLoading
             ? const CircularProgressIndicator()

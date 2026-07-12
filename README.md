@@ -58,25 +58,22 @@ A simplified Flutter application for non-technical users to edit a single field 
 ## How to Use
 
 1. **Sign in with Google**: The app will automatically ask you to sign in with your Google account
-2. **Select your field**: Choose from a dropdown menu of available fields in your sheet
-3. **Edit text**: Type or modify the text (letters, numbers, and spaces only)
-4. **Save**: Click the Save button to store your changes in Google Sheets
-5. **View updates**: The app shows the current content below the editor
+2. **Edit text**: Type or modify the text (letters, numbers, spaces only)
+3. **Save**: Click the Save button to store your changes in Google Sheets
+4. **View current content**: The app shows the current content below the editor
 
 ## Project Structure
 
 ```
 lib/
-├── main.dart                 # App entry point
-├── screens/
-│   └── simple_edit_screen.dart   # Simple single-field editor
-├── services/
-│   ├── auth_service.dart        # Google Sign-In & token management
-│   └── sheet_service.dart       # Google Sheets API operations
-├── utils/
-│   └── constants.dart           # App-wide constants
-└── models/
-    └── sheet_item.dart         # Data model for sheet items
+├── main.dart                 # App entry point & auth wrapper
+└── screens/
+    └── simple_edit_screen.dart   # Simple single-field editor
+└── services/
+    ├── auth_service.dart        # Google Sign-In & token management
+    └── sheet_service.dart       # Google Sheets API operations
+└── utils/
+    └── constants.dart           # App-wide constants
 ```
 
 ## Building for Release
@@ -124,3 +121,15 @@ The workflows use the `SPREADSHEET_ID` secret from GitHub repository settings.
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run `flutter analyze` and `flutter test`
+5. Submit a pull request
+
+## Support
+
+For issues and feature requests, please use the GitHub issue tracker.
